@@ -25,6 +25,11 @@
 (require 'linum)
 (global-linum-mode)
 
+
+;;Set default browser to Chromium
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "chromium-browser")
+
 ;;(add-to-list 'default-frame-alist '(height . 42))
 ;;(add-to-list 'default-frame-alist '(width . 168))
 
@@ -149,3 +154,12 @@
 ;; (add-hook 'after-init-hook 'session-initialize)
 ;; (load "wcy-desktop")
 ;; (wcy-desktop-init)
+
+;; ido-mode improve open file and change frame experience
+(when (fboundp 'ido-mode)
+  (ido-mode t)
+  (setq ido-save-directory-list-file nil))
+
+;; Javascript mode -- js2-mode
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
