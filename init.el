@@ -163,3 +163,7 @@
 ;; Javascript mode -- js2-mode
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+;; C Programming Languauge
+(require 'cc-mode)
+(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
