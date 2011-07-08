@@ -165,5 +165,4 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; C Programming Languauge
-(require 'cc-mode)
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
