@@ -1,0 +1,212 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.5.16)  5 JUL 2011 22:46
+entering extended mode
+ %&-line parsing enabled.
+**\input circ.tex
+(./circ.tex (/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-texlive/tex/generic/babel/babel.sty
+Package: babel 2008/07/06 v3.8l The Babel package
+
+(/usr/share/texmf-texlive/tex/generic/babel/germanb.ldf
+Language: germanb 2008/06/01 v2.6m German support from the babel system
+
+(/usr/share/texmf-texlive/tex/generic/babel/babel.def
+File: babel.def 2008/07/06 v3.8l Babel common definitions
+\babel@savecnt=\count87
+\U@D=\dimen103
+)
+
+Package babel Warning: No hyphenation patterns were loaded for
+(babel)                the language `German'
+(babel)                I will use the patterns loaded for \language=0 instead.
+
+\l@german = a dialect from \language0
+\l@austrian = a dialect from \language\l@german 
+Package babel Info: Making " an active character on input line 102.
+)) (/usr/share/texmf-texlive/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/share/texmf-texlive/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+(/usr/share/texmf-texlive/tex/latex/base/latin1.def
+File: latin1.def 2008/03/30 v1.1d Input encoding file
+))
+(/usr/local/share/texmf/tex/latex/preview/preview.sty
+Package: preview 2010/02/14 11.86 (AUCTeX/preview-latex)
+
+(/usr/local/share/texmf/tex/latex/preview/prshowlabels.def))
+\chaos=\box26
+\tdim=\dimen104
+\fives=\count88
+\ones=\count89
+\raster=\box27
+
+No file circ.aux.
+\openout1 = `circ.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 39.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 39.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 39.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 45.
+(/usr/share/texmf-texlive/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 52.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 52.
+
+Underfull \hbox (badness 2452) in paragraph at lines 52--53
+[]\T1/cmr/m/n/10 Sie lassen sich als Funk-tion $\OML/cmm/m/it/10 y \OT1/cmr/m/n
+/10 = \OML/cmm/m/it/10 f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )$
+ []
+
+
+Underfull \hbox (badness 1028) in paragraph at lines 53--55
+\T1/cmr/m/n/10 heiÿt, en-twed-er durchge-hend steigend oder
+ []
+
+
+LaTeX Warning: Reference `lgi' on page 1 undefined on input line 77.
+
+
+LaTeX Warning: Reference `lgii' on page 1 undefined on input line 85.
+
+
+LaTeX Warning: Reference `linalg' on page 1 undefined on input line 110.
+
+
+LaTeX Warning: Reference `linc' on page 1 undefined on input line 112.
+
+
+LaTeX Warning: Reference `linpict' on page 1 undefined on input line 114.
+
+\x=\count90
+\y=\count91
+\d=\count92
+\dx=\count93
+\dy=\count94
+
+Underfull \hbox (badness 3098) in paragraph at lines 218--222
+\T1/cmr/m/n/10 Wir be-tra-cht-en hi-er nur den Achtelkreis im
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 218--222
+\T1/cmr/m/n/10 zweit-en Ok-tan-ten ($\OML/cmm/m/it/10 y \OMS/cmsy/m/n/10 ^^U \O
+ML/cmm/m/it/10 x \OMS/cmsy/m/n/10 ^^U \OT1/cmr/m/n/10 0$\T1/cmr/m/n/10 ). Hi-er
+ gel-
+ []
+
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+
+] [2]
+
+LaTeX Warning: Reference `ggg' on page 3 undefined on input line 239.
+
+
+LaTeX Warning: Reference `ggg' on page 3 undefined on input line 244.
+
+
+LaTeX Warning: Reference `hhh' on page 3 undefined on input line 244.
+
+
+LaTeX Warning: Reference `alg' on page 3 undefined on input line 267.
+
+
+LaTeX Warning: Reference `prog' on page 3 undefined on input line 268.
+
+\x=\count95
+\y=\count96
+\q=\count97
+[3]
+
+LaTeX Warning: Reference `phyp' on page 4 undefined on input line 373.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Warning: Reference `halg' on page 4 undefined on input line 394.
+
+\x=\count98
+\y=\count99
+\q=\count100
+\r=\count101
+[4] [5
+
+] (./circ.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 986 strings out of 495061
+ 11095 string characters out of 1182621
+ 99968 words of memory out of 3000000
+ 4202 multiletter control sequences out of 15000+50000
+ 12381 words of font info for 32 fonts, out of 3000000 for 9000
+ 28 hyphenation exceptions out of 8191
+ 24i,7n,24p,214b,358s stack positions out of 5000i,500n,10000p,200000b,50000s
+ </home/darkjh/.texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0900.600pk> </home/
+darkjh/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1000.600pk> </home/darkjh/.te
+xmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </home/darkjh/.texmf-var/fo
+nts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/darkjh/.texmf-var/fonts/pk/ljf
+our/jknappen/ec/ecbx1440.600pk> </home/darkjh/.texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecrm1200.600pk> </home/darkjh/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm
+1728.600pk></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-texli
+ve/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/typ
+e1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
+fonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cm
+sy7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/latxfont/lcircle1
+.pfb>
+Output written on circ.pdf (5 pages, 153092 bytes).
+PDF statistics:
+ 279 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

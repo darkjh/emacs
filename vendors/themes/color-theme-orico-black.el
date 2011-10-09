@@ -18,7 +18,7 @@
   (interactive)
   (color-theme-install
    '(color-theme-orico-black
-     ((background-color . "#2e3436")
+     ((background-color . "#272821") ;;2e2436
       (background-mode . dark)
       (border-color . "#888a85")
       (cursor-color . "#fce94f")
@@ -43,9 +43,9 @@
      (font-lock-keyword-face ((t (:foreground "#729fcf" :bold t))))
      (font-lock-string-face ((t (:foreground "#8ae234"))))
      (font-lock-type-face ((t (:foreground "#8ae234" :bold t))))
-     (font-lock-variable-name-face ((t (:foreground "#990000"))))
+     (font-lock-variable-name-face ((t (:foreground "#ff9999" :underline t))))
      (font-lock-warning-face ((t (:bold t :foreground "#f57900"))))
-     (font-lock-function-name-face ((t (:foreground "#ffff00"))))
+     (font-lock-function-name-face ((t (:foreground "#ffff00" :italic t))))
 
      (py-decorators-face ((t (:foreground "#ad7fa8" :bold t))))
      (py-pseudo-keyword-face ((t (:foreground "#4FCFC5"))))

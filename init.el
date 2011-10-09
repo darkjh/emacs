@@ -70,7 +70,7 @@
 ;;Configurations for LaTex
 
 (load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Configurations for Python
@@ -79,16 +79,15 @@
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 
 ;;pymacs
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
+;; (setq ropemacs-enable-autoimport t)
+
 ;;autocomplete
 (add-to-list 'load-path "~/.emacs.d/vendors/auto-complete-1.3")
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendors/auto-complete-1.3/dict")
 (ac-config-default)
-
-
 
 (require 'ipython)
 
@@ -118,20 +117,17 @@
 
 (autoload 'autopair-global-mode "autopair" nil t)
 (autopair-global-mode)
-(add-hook 'lisp-mode-hook
-          #'(lambda () (setq autopair-dont-activate t)))
+;; (add-hook 'lisp-mode-hook
+;;           #'(lambda () (setq autopair-dont-activate t)))
 ;;Autopair for python
 (add-hook 'python-mode-hook
           #'(lambda ()
                (push '(?' . ?')
+
                      (getf autopair-extra-pairs :code))
                (setq autopair-handle-action-fns
                      (list #'autopair-default-handle-action
                            #'autopair-python-triple-quote-action))))
-
-;;pep8 and pylint for code checking
-;(require 'python-pep8)
-;(require 'python-pylint)
 
 ;;delete trailing spaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -148,9 +144,6 @@
 ;(require 'smart-operator)
 ;;(require 'auto-complete-config)
 
-
-;(load-library "init-python")
-
 ;; (add-hook 'after-init-hook 'session-initialize)
 ;; (load "wcy-desktop")
 ;; (wcy-desktop-init)
@@ -165,4 +158,27 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; C Programming Languauge
-(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+(require 'cc-mode)
+;;(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+(define-key c-mode-map [return] 'newline-and-indent)
+
+;; Perl Programming
+;; Use cperl-mode instead of the default perl-mode
+(add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+(add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
+(add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
+(add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
+
+;; Code folding
+(autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
+(autoload 'hideshowvis-minor-mode
+  "hideshowvis"
+  "Will indicate regions foldable with hideshow in the fringe."
+  'interactive)
+(dolist (hook (list 'emacs-lisp-mode-hook
+                    'c++-mode-hook
+		    'cperl-mode-hook
+		    'c-mode-hook))
+  (add-hook hook 'hideshowvis-enable))
+
+

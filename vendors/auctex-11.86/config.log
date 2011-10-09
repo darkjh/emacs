@@ -27,6 +27,7 @@ uname -v = #42-Ubuntu SMP Mon Apr 11 05:17:09 UTC 2011
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
+PATH: /home/darkjh/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
@@ -55,8 +56,8 @@ configure:1992: checking for emacs
 configure:2010: found /usr/bin/emacs
 configure:2022: result: /usr/bin/emacs
 configure:2038: checking if /usr/bin/emacs is XEmacs
-/usr/bin/emacs -batch -no-site-file -eval (let* ((x (if (featurep (quote xemacs)) "yes" "no"))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126"))
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+/usr/bin/emacs -batch -no-site-file -eval (let* ((x (if (featurep (quote xemacs)) "yes" "no"))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209"))
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => no
 configure:2058: result: no
 configure:2062: checking for Emacs prefix
@@ -67,38 +68,44 @@ configure:2062: checking for Emacs prefix
         (setq prefix parent)
       (if (string= (file-name-nondirectory parent) "bin")
          (setq prefix (directory-file-name (file-name-directory parent)))))
-    prefix) (error NONE)))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126")) /usr/bin/emacs
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+    prefix) (error NONE)))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209")) /usr/bin/emacs
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => /usr
 configure:2081: result: "/usr"
 configure:2111: checking if Emacs is recent enough
 /usr/bin/emacs -batch -no-site-file -eval (let* ((x (cond ((< emacs-major-version 21) "no")
 			 ((> emacs-major-version 21) "yes")
 			 ((< emacs-minor-version 01) "no")
-			 (t "yes")))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126"))
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+			 (t "yes")))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209"))
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => yes
 configure:2125: result: yes
 configure:2135: checking for MULE support
-/usr/bin/emacs -batch -eval (let* ((x (condition-case nil (require 'mule ) 	(error (prog1 nil (message "mule not found")))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126"))
+/usr/bin/emacs -batch -eval (let* ((x (condition-case nil (require 'mule ) 	(error (prog1 nil (message "mule not found")))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209"))
 Loading 00debian-vars...
 No /etc/mailname. Reverting to default...
 Loading /etc/emacs/site-start.d/50dictionaries-common.el (source)...
 Loading debian-ispell...
 Loading /var/cache/dictionaries-common/emacsen-ispell-default.el (source)...
 Loading /var/cache/dictionaries-common/emacsen-ispell-dicts.el (source)...
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+Loading /etc/emacs/site-start.d/50global.el (source)...
+Loading /etc/emacs/site-start.d/50pylint.el (source)...
+Loading pylint...
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => mule
 configure:2169: result: yes
 configure:2214: checking if build directory is valid
-/usr/bin/emacs -batch -eval (let* ((x (if (or (member (directory-file-name default-directory) load-path)	      (member (file-name-as-directory default-directory) load-path))	 "no" "yes"))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126"))
+/usr/bin/emacs -batch -eval (let* ((x (if (or (member (directory-file-name default-directory) load-path)	      (member (file-name-as-directory default-directory) load-path))	 "no" "yes"))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209"))
 Loading 00debian-vars...
 No /etc/mailname. Reverting to default...
 Loading /etc/emacs/site-start.d/50dictionaries-common.el (source)...
 Loading debian-ispell...
 Loading /var/cache/dictionaries-common/emacsen-ispell-default.el (source)...
 Loading /var/cache/dictionaries-common/emacsen-ispell-dicts.el (source)...
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+Loading /etc/emacs/site-start.d/50global.el (source)...
+Loading /etc/emacs/site-start.d/50pylint.el (source)...
+Loading pylint...
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => yes
 configure:2230: result: yes
 configure:2318: checking where lisp files go
@@ -127,14 +134,17 @@ configure:2318: checking where lisp files go
 		   (throw 22
                       (if (string= reldir ".") (directory-file-name prefix)
                         (concat (file-name-as-directory prefix)
-                                reldir))))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126")) ${datadir}/emacs /usr/local/share/emacs
+                                reldir))))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209")) ${datadir}/emacs /usr/local/share/emacs
 Loading 00debian-vars...
 No /etc/mailname. Reverting to default...
 Loading /etc/emacs/site-start.d/50dictionaries-common.el (source)...
 Loading debian-ispell...
 Loading /var/cache/dictionaries-common/emacsen-ispell-default.el (source)...
 Loading /var/cache/dictionaries-common/emacsen-ispell-dicts.el (source)...
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+Loading /etc/emacs/site-start.d/50global.el (source)...
+Loading /etc/emacs/site-start.d/50pylint.el (source)...
+Loading pylint...
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => ${datadir}/emacs/site-lisp
 configure:2390: result: ${datadir}/emacs/site-lisp
 configure:2394: checking what file to use for auctex startup
@@ -165,8 +175,8 @@ configure:2439: checking where the package lisp files go
               (t
 	       `(expand-file-name
                    ,(file-relative-name path startupdir)
-	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126")) /usr/local/share/emacs/site-lisp/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209")) /usr/local/share/emacs/site-lisp/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => (expand-file-name "auctex" (file-name-directory load-file-name))
 configure:2520: result: ${datadir}/emacs/site-lisp/auctex
 configure:2523: checking where the data files go
@@ -195,8 +205,8 @@ configure:2523: checking where the data files go
               (t
 	       `(expand-file-name
                    ,(file-relative-name path startupdir)
-	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126")) /usr/local/share/emacs/site-lisp/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209")) /usr/local/share/emacs/site-lisp/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => (expand-file-name "auctex" (file-name-directory load-file-name))
 configure:2604: result: ${datadir}/emacs/site-lisp/auctex
 /usr/bin/emacs -batch -no-site-file -eval (let* ((path(pop command-line-args-left)) (lispdir(pop command-line-args-left)) (startup(pop command-line-args-left)) (target(pop command-line-args-left))(x (progn (setq path (directory-file-name path))
@@ -224,8 +234,8 @@ configure:2604: result: ${datadir}/emacs/site-lisp/auctex
               (t
 	       `(expand-file-name
                    ,(file-relative-name path startupdir)
-	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126"))  /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/auctex.el tex-site.el
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209"))  /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/auctex.el tex-site.el
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => (expand-file-name "tex-site.el" (file-name-directory load-file-name))
 configure:2681: checking where the info files go
 configure:2683: result: ${datarootdir}/info
@@ -256,8 +266,8 @@ configure:2704: result: ${localstatedir}/auctex
               (t
 	       `(expand-file-name
                    ,(file-relative-name path startupdir)
-	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-15126")) /usr/local/var/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
-Wrote /home/darkjh/elisp/auctex-11.86/conftest-15126
+	           (file-name-directory load-file-name))))))))) (write-region (if (stringp x) x (prin1-to-string x)) nil "./conftest-4209")) /usr/local/var/auctex /usr/local/share/emacs/site-lisp /usr/local/share/emacs/site-lisp/tex-site.el
+Wrote /home/darkjh/.emacs.d/vendors/auctex-11.86/conftest-4209
 => "/usr/local/var/auctex"
 configure:2784: checking for tex
 configure:2802: found /usr/bin/tex
@@ -303,7 +313,7 @@ config.status:754: creating Makefile
 config.status:754: creating tex-site.el.out
 config.status:754: creating doc/Makefile
 config.status:754: creating auctex.el
-configure:4494: === configuring in preview (/home/darkjh/elisp/auctex-11.86/preview)
+configure:4494: === configuring in preview (/home/darkjh/.emacs.d/vendors/auctex-11.86/preview)
 configure:4557: running /bin/bash ./configure --disable-option-checking '--prefix=/usr/local'  --cache-file=/dev/null --srcdir=.
 
 ## ---------------- ##
