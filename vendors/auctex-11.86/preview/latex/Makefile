@@ -32,12 +32,12 @@ datarootdir=${prefix}/share$(null)
 datadir=${datarootdir}$(null)
 exec_prefix=${prefix}$(null)
 libdir=${exec_prefix}/lib$(null)
-previewtexmfdir = ${datadir}/texmf/tex/latex/preview$(null)
-previewdocdir = ${datadir}/texmf/doc/latex/styles$(null)
+previewtexmfdir = /usr/share/texmf/tex/latex/preview$(null)
+previewdocdir = /usr/share/texmf/doc/latex/styles$(null)
 TEXMFGEN = preview.sty prauctex.def prauctex.cfg prshowbox.def prshowlabels.def prtracingall.def prtightpage.def prlyx.def prcounters.def prfootnotes.def
 
 DESTDIR=
-INSTALL = /usr/bin/install -c
+INSTALL = /bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 MKINSTALLDIRS = ../../mkinstalldirs
 

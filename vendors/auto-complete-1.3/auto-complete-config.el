@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -30,7 +30,7 @@
 
 (require 'auto-complete)
 
-
+
 
 ;;;; Additional sources
 

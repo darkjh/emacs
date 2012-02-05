@@ -46,16 +46,16 @@ ICON_SOURCES = \
 prefix = /usr/local$(null)
 exec_prefix = ${prefix}$(null)
 libdir = ${exec_prefix}/lib$(null)
-packagedatadir = ${datadir}/emacs/site-lisp/auctex$(null)
+packagedatadir = /usr/share/emacs/site-lisp/auctex$(null)
 datarootdir = ${prefix}/share$(null)
 datadir = ${datarootdir}$(null)
-previewstartfile = ${datadir}/emacs/site-lisp/preview-latex.el
+previewstartfile = /usr/share/emacs/site-lisp/preview-latex.el
 packagedir = no$(null)
-packagelispdir = ${datadir}/emacs/site-lisp/auctex$(null)
+packagelispdir = /usr/share/emacs/site-lisp/auctex$(null)
 auctexdir = ..$(null)
 DESTDIR=
 
-INSTALL = /usr/bin/install -c
+INSTALL = /bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 MKINSTALLDIRS = ../mkinstalldirs
 
