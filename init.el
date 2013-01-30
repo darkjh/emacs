@@ -34,9 +34,6 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "chromium-browser")
 
-;; (add-to-list 'default-frame-alist '(height . 42))
-;; (add-to-list 'default-frame-alist '(width . 80))
-
 ;; Scheme -------------------------------------------------------------
 
 (custom-set-variables
@@ -70,10 +67,6 @@
      ;; (color-theme-orico-black)))
      (color-theme-monokai)))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
  '(quack-pltish-comment-face ((((class color) (background dark)) (:foreground "red1"))))
  '(quack-pltish-defn-face ((t (:foreground "yellow1" :weight bold))))
  '(quack-pltish-keyword-face ((t (:foreground "darkturquoise" :weight bold))))
@@ -95,7 +88,7 @@
 
 (setq TeX-view-program-selection
       '((output-dvi "DVI Viewer")
-        (output-pdf "PDF Viewer")
+        (output-pdf "PDF Vixewer")
         (output-html "Google Chrome")))
 (setq TeX-view-program-list
       '(("DVI Viewer" "evince %o")
@@ -110,38 +103,20 @@
 
 ;; Configurations for Python ------------------------------------------
 
-(require 'python-mode)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(require 'ipython)
+(setq py-python-command-args '("-pylab" "-colors" "nocolor"))
 
-;;pymacs
-;; (require 'pymacs)
-;; (pymacs-load "ropemacs" "rope-")
-;; (setq ropemacs-enable-autoimport t)
-
-
-;; (require 'ipython)
 
 (require 'lambda-mode)
 (add-hook 'python-mode-hook #'lambda-mode 1)
 (setq lambda-symbol (string (make-char 'greek-iso8859-7 107)))
 
-;;set up Anything for compelation
-;; (require 'anything)
-;; (require 'anything-ipython)
-;; (when (require 'anything-show-completion nil t)
-;;    (use-anything-show-completion 'anything-ipython-complete
-;;                                  '(length initial-pattern)))
-
-;; (setq ipython-completion-command-string "print(';'.join(get_ipython().Completer.complete('%s')[1])) #PYTHON-MODE SILENT\n")
-
-
-;;set up Comint
-;; (require 'comint)
-;; (define-key comint-mode-map (kbd "M-") 'comint-next-input)
-;; (define-key comint-mode-map (kbd "M-") 'comint-previous-input)
-;; (define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
-;; (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
-
+;; Jedi for python
+;; EPC
+(add-to-list 'load-path "~/.emacs.d/vendors/emacs-jedi")
+(require 'epc)
+(autoload 'jedi:setup "jedi" nil t)
+(add-hook 'python-mode-hook 'jedi:setup)
 
 ;; Autopair -----------------------------------------------------------
 
@@ -178,7 +153,7 @@
 
 ;; Make Ac mode aware of latex
 (require 'ac-math)
-(add-to-list 'ac-modes 'latex-mode)
+(add-to-list 'ac-modes 'latex-mode 'org-mode)
 
 (defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
   (setq ac-sources
@@ -276,15 +251,6 @@
 ;; Minimap ------------------------------------------------------------
 (require 'minimap)
 
-;; Prediction Mode ----------------------------------------------------
-
-;; (add-to-list 'load-path "/home/darkjh/.emacs.d/vendors/predictive")
-;; (add-to-list 'load-path "/homes/darkjh/.emacs.d/vendors/predictive/texinfo")
-;; (add-to-list 'load-path "/home/darkjh/.emacs.d/vendors/predictive/html")
-;; (add-to-list 'load-path "/home/darkjh/.emacs.d/vendors/predictive/latex")
-;; (require 'predictive)
-
-
 ;; Ibus input mode ----------------------------------------------------
 
 ;; http://www.emacswiki.org/emacs/IBusMode
@@ -320,7 +286,9 @@
 (add-hook 'org-mode-hook
 	  (lambda () (setq truncate-lines nil)))
 (global-set-key "\C-cb" 'org-iswitchb)
-
+(setq org-directory "~/Dropbox/org-notes")
+(setq org-mobile-directory "~/Dropbox/org-notes")
+(setq org-mobile-inbox-for-pull "~/Dropbox/org-notes")
 
 ;; Word Count Mode -----------------------------------------------------
 
@@ -342,12 +310,21 @@
 (if (eq window-system 'x)
 (font-lock-mode 1))))
 
+;; run an inferior Octave process in a special Emacs buffer
+(autoload 'run-octave "octave-inf" nil t)
+
 ;; Ruby -----------------------------------------------------------------
 
+;; (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
+;; (autoload 'inf-ruby-keys "inf-ruby" "" t)
+;; (eval-after-load 'ruby-mode
+;;   '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
+
+(require 'inf-ruby)
 (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
-(autoload 'inf-ruby-keys "inf-ruby" "" t)
+(autoload 'inf-ruby-setup-keybindings "inf-ruby" "" t)
 (eval-after-load 'ruby-mode
-  '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
+  '(add-hook 'ruby-mode-hook 'inf-ruby-setup-keybindings))
 
 ;; Markdown -------------------------------------------------------------
 
@@ -367,3 +344,34 @@
                             (define-key c-mode-base-map [(f5)] 'gud-go)
                             (define-key c-mode-base-map [(f7)] 'gud-step)
                             (define-key c-mode-base-map [(f8)] 'gud-next)))
+
+
+;; Tabbar mode  --------------------------------------------------------
+(require 'tabbar)
+(tabbar-mode 1)
+
+;; http://blog.csdn.net/CherylNatsu/article/details/6204737
+;; 设置tabbar外观
+;; 设置默认主题: 字体, 背景和前景颜色，大小
+(set-face-attribute 'tabbar-default nil
+		    :family "Terminus"
+		    :background "#272822"
+		    :foreground "#F8F8F2"
+		    :height 1.0)
+;; 设置左边按钮外观：外框框边大小和颜色
+(set-face-attribute 'tabbar-button nil
+		    :inherit 'tabbar-default
+		    :box '(:line-width 1 :color "yellow70"))
+;; 设置当前tab外观：颜色，字体，外框大小和颜色
+(set-face-attribute 'tabbar-selected nil
+		    :inherit 'tabbar-default
+		    :foreground "black"
+		    :background "white"
+		    :box '(:line-width 2 :color "#F92672")
+		    :overline "black"
+		    :underline "black"
+		    :weight 'bold)
+;; 设置非当前tab外观：外框大小和颜色
+(set-face-attribute 'tabbar-unselected nil
+		    :inherit 'tabbar-default
+		    :box '(:line-width 1 :color "#00B2BF"))

@@ -16,9 +16,9 @@
 ;; * drop the file somewhere on your load path (perhaps ~/.emacs.d)
 ;; * Add the following lines to your .emacs file:
 ;;    (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
-;;    (autoload 'inf-ruby-keys "inf-ruby" "" t)
+;;    (autoload 'inf-ruby-setup-keybindings "inf-ruby" "" t)
 ;;    (eval-after-load 'ruby-mode
-;;      '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
+;;      '(add-hook 'ruby-mode-hook 'inf-ruby-setup-keybindings))
 
 ;;; TODO:
 ;;
@@ -39,15 +39,8 @@
 (defvar inf-ruby-first-prompt-pattern "^irb(.*)[0-9:]+0> *"
   "First prompt regex pattern of ruby interpreter.")
 
-;; (defvar inf-ruby-first-prompt-pattern "^[>+-]{2} *"
-;;   "First prompt regex pattern of ruby interpreter.")
-
-
 (defvar inf-ruby-prompt-pattern "^\\(irb(.*)[0-9:]+[>*\"'] *\\)+"
   "Prompt regex pattern of ruby interpreter.")
-
-;; (defvar inf-ruby-prompt-pattern "^[>+-]{2} *"
-;;   "Prompt regex pattern of ruby interpreter.")
 
 (defvar inf-ruby-mode-hook nil
   "*Hook for customising inf-ruby mode.")
@@ -95,8 +88,8 @@ next one.")
   (define-key ruby-mode-map "\C-c\M-b" 'ruby-send-block-and-go)
   (define-key ruby-mode-map "\C-c\C-j" 'ruby-send-line)
   (define-key ruby-mode-map "\C-c\M-j" 'ruby-send-line-and-go)
-  (define-key ruby-mode-map "\C-c\C-f" 'ruby-send-definition)
-  (define-key ruby-mode-map "\C-c\M-f" 'ruby-send-definition-and-go)
+  (define-key ruby-mode-map "\C-c\C-x" 'ruby-send-definition)
+  (define-key ruby-mode-map "\C-c\M-x" 'ruby-send-definition-and-go)
   (define-key ruby-mode-map "\C-c\C-r" 'ruby-send-region)
   (define-key ruby-mode-map "\C-c\M-r" 'ruby-send-region-and-go)
   (define-key ruby-mode-map "\C-c\C-z" 'ruby-switch-to-inf)
@@ -275,6 +268,16 @@ Must not contain ruby meta characters.")
       (ruby-beginning-of-defun)
       (ruby-send-region (point) end))))
 
+(defun ruby-send-line ()
+  "Send the current line to the inferior Ruby process."
+  (interactive)
+  (save-excursion
+    ;;(ruby-end-of-line)
+    (end-of-line)
+    (let ((end (point)))
+      (beginning-of-line)
+      (ruby-send-region (point) end))))
+
 (defun ruby-send-last-sexp ()
   "Send the previous sexp to the inferior Ruby process."
   (interactive)
@@ -289,17 +292,6 @@ Must not contain ruby meta characters.")
     (let ((end (point)))
       (ruby-beginning-of-block)
       (ruby-send-region (point) end))))
-
-(defun ruby-send-line ()
-  "Send the current line to the inferior Ruby process."
-  (interactive)
-  (save-excursion
-    ;;(ruby-end-of-line)
-    (end-of-line)
-    (let ((end (point)))
-      (beginning-of-line)
-      (ruby-send-region (point) end))))
-
 
 (defun ruby-switch-to-inf (eob-p)
   "Switch to the ruby process buffer.
