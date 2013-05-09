@@ -37,10 +37,11 @@
 ;; Scheme -------------------------------------------------------------
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ibus-python-shell-command-name "/usr/bin/python2")
  '(quack-default-program "racket")
  '(quack-newline-behavior (quote indent-newline-indent))
  '(quack-programs (quote ("mzscheme" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
@@ -67,6 +68,13 @@
      ;; (color-theme-orico-black)))
      (color-theme-monokai)))
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-level-3 ((t (:inherit outline-5))))
+ '(org-level-5 ((t (:inherit outline-6))))
+ '(org-level-6 ((t (:inherit outline-3))))
  '(quack-pltish-comment-face ((((class color) (background dark)) (:foreground "red1"))))
  '(quack-pltish-defn-face ((t (:foreground "yellow1" :weight bold))))
  '(quack-pltish-keyword-face ((t (:foreground "darkturquoise" :weight bold))))
@@ -115,8 +123,9 @@
 ;; EPC
 (add-to-list 'load-path "~/.emacs.d/vendors/emacs-jedi")
 (require 'epc)
-(autoload 'jedi:setup "jedi" nil t)
 (add-hook 'python-mode-hook 'jedi:setup)
+(autoload 'jedi:setup "jedi" nil t)
+(setq jedi:setup-keys t)
 
 ;; Autopair -----------------------------------------------------------
 
@@ -165,7 +174,7 @@
 ;(autoload 'ac-latex-setup "auto-complete-latex" "ac and aucTeX" t)
 ;(add-hook 'LaTeX-mode-hook (lambda() (ac-latex-setup)))
 
-(require 'smart-operator)
+;; (require 'smart-operator)
 
 
 ;; ido-mode ------------------------------------------------------------
@@ -245,34 +254,33 @@
 
 ;; ESS for R ----------------------------------------------------------
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/ESS/lisp/")
+(add-to-list 'load-path "/home/darkjh/emacs-packages/ess-12.09-2/lisp/")
 (require 'ess-site)
 
 ;; Minimap ------------------------------------------------------------
 (require 'minimap)
 
-;; Ibus input mode ----------------------------------------------------
+;; ;; Ibus input mode ----------------------------------------------------
 
-;; http://www.emacswiki.org/emacs/IBusMode
-;; 开启ibus 提供中文输入
-(require 'ibus)
-;; 因为系统默认python3，所以给ibus专门设置python2
-(custom-set-variables '(ibus-python-shell-command-name "/usr/bin/python2"))
-;; 自动开启ibus，并且再每次启动emacsclient的时候也这么做
-(add-hook 'after-init-hook 'ibus-mode-on)
-(add-hook 'after-make-frame-functions
-	  (lambda (new-frame)
-	    (select-frame new-frame)
-	    (or ibus-mode (ibus-mode-on))))
-;; 保留选择和undo的快捷键，ibus暂时用鼠标来操纵
-(ibus-define-common-key ?\C-\s nil)
-(ibus-define-common-key ?\C-/ nil)
-;; ibus激活时游标为橙色，平时为黄色
-(setq ibus-cursor-color '("orange" "yellow" "limegreen"))
-;; 使用win键（s）加space来切换ibus状态
-(ibus-define-common-key ?\S-\s nil)
-(global-set-key (kbd "s-SPC") 'ibus-toggle)
+;; ;; http://www.emacswiki.org/emacs/IBusMode
+;; ;; 开启ibus 提供中文输入
+;; (require 'ibus)
+;; ;; 因为系统默认python3，所以给ibus专门设置python2
 
+;; ;; 自动开启ibus，并且再每次启动emacsclient的时候也这么做
+;; (add-hook 'after-init-hook 'ibus-mode-on)
+;; (add-hook 'after-make-frame-functions
+;; 	  (lambda (new-frame)
+;; 	    (select-frame new-frame)
+;; 	    (or ibus-mode (ibus-mode-on))))
+;; ;; 保留选择和undo的快捷键，ibus暂时用鼠标来操纵
+;; (ibus-define-common-key ?\C-\s nil)
+;; (ibus-define-common-key ?\C-/ nil)
+;; ;; ibus激活时游标为橙色，平时为黄色
+;; (setq ibus-cursor-color '("orange" "yellow" "limegreen"))
+;; ;; 使用win键（s）加space来切换ibus状态
+;; (ibus-define-common-key ?\S-\s nil)
+;; (global-set-key (kbd "s-SPC") 'ibus-toggle)
 
 ;; Org-Mode ------------------------------------------------------------
 
@@ -334,6 +342,10 @@
 	  '(lambda ()
 	     (auto-fill-mode 0)))
 
+;; HTML/xHtml ----------------------------------------------------------
+
+;; (load "~/.emacs.d/vendors/nxhtml/autostart")
+
 ;; Common Lisp ---------------------------------------------------------
 
 (setq inferior-lisp-program "/usr/bin/clisp")
@@ -361,7 +373,7 @@
 ;; 设置左边按钮外观：外框框边大小和颜色
 (set-face-attribute 'tabbar-button nil
 		    :inherit 'tabbar-default
-		    :box '(:line-width 1 :color "yellow70"))
+		    :box '(:line-width 1 :color "#F0DFAF"))
 ;; 设置当前tab外观：颜色，字体，外框大小和颜色
 (set-face-attribute 'tabbar-selected nil
 		    :inherit 'tabbar-default
@@ -375,3 +387,7 @@
 (set-face-attribute 'tabbar-unselected nil
 		    :inherit 'tabbar-default
 		    :box '(:line-width 1 :color "#00B2BF"))
+
+;; Undo-tree  --------------------------------------------------------
+(require 'undo-tree)
+(global-undo-tree-mode)
