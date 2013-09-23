@@ -29,6 +29,10 @@
 (require 'linum)
 (global-linum-mode t)
 
+;; ELPA source  -------------------------------------------------------
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; Set default browser to Chromium ------------------------------------
 (setq browse-url-browser-function 'browse-url-generic
@@ -42,9 +46,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ibus-python-shell-command-name "/usr/bin/python2")
+ '(org-agenda-files (quote ("~/Dropbox/Notes/kxen_notes/planning-bigraph-projection.org" "~/Dropbox/Notes/algorithm.org")))
  '(quack-default-program "racket")
  '(quack-newline-behavior (quote indent-newline-indent))
- '(quack-programs (quote ("mzscheme" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
+ '(quack-programs (quote ("petite" "mzscheme" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "1mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
  '(quack-switch-to-scheme-method (quote other-window))
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
  '(tool-bar-mode nil nil (tool-bar)))
@@ -254,8 +259,8 @@
 
 ;; ESS for R ----------------------------------------------------------
 
-(add-to-list 'load-path "/home/darkjh/emacs-packages/ess-12.09-2/lisp/")
-(require 'ess-site)
+;; (add-to-list 'load-path "/home/darkjh/emacs-packages/ess-12.09-2/lisp/")
+;; (require 'ess-site)
 
 ;; Minimap ------------------------------------------------------------
 (require 'minimap)
@@ -391,3 +396,10 @@
 ;; Undo-tree  --------------------------------------------------------
 (require 'undo-tree)
 (global-undo-tree-mode)
+
+;; Dirtree  --------------------------------------------------------
+(autoload 'dirtree "dirtree" "Add directory to tree view" t)
+
+;; Scala mode  --------------------------------------------------------
+(add-to-list 'load-path "~/.emacs.d/vendors/scala-mode2")
+(require 'scala-mode2)
