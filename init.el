@@ -165,6 +165,11 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
+;; use C-n, C-p to navigate completion menu
+(setq ac-use-menu-map t)
+(define-key ac-menu-map "\C-n" 'ac-next)
+(define-key ac-menu-map "\C-p" 'ac-previous)
+
 ;; Make Ac mode aware of latex
 (require 'ac-math)
 (add-to-list 'ac-modes 'latex-mode 'org-mode)
