@@ -4,4 +4,7 @@
 /auto-save-list
 .wcy_desktop_save
 *.dat
+ac-comphist.dat
 url/
+
+elpa/
