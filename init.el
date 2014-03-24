@@ -1,3 +1,4 @@
+
 ;; My emacs init file
 ;; JU Han
 ;; ju.han.felix@gmail.com
@@ -46,7 +47,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ibus-python-shell-command-name "/usr/bin/python2")
- '(org-agenda-files (quote ("~/Dropbox/Notes/kxen_notes/planning-bigraph-projection.org" "~/Dropbox/Notes/algorithm.org")))
+ '(org-agenda-files (quote ("~/Dropbox/Notes/algorithm.org")))
  '(quack-default-program "racket")
  '(quack-newline-behavior (quote indent-newline-indent))
  '(quack-programs (quote ("petite" "mzscheme" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "1mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
@@ -160,9 +161,8 @@
 
 
 ;; Auto complete ------------------------------------------------------
-
-(require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendors/auto-complete-1.3/dict")
+(require 'auto-complete-config)
 (ac-config-default)
 
 ;; Make Ac mode aware of latex
@@ -403,3 +403,18 @@
 ;; Scala mode  --------------------------------------------------------
 (add-to-list 'load-path "~/.emacs.d/vendors/scala-mode2")
 (require 'scala-mode2)
+
+;; Golang
+(require 'go-mode)
+(autoload 'go-mode "go-mode" "" t nil)
+(add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
+(autoload 'godoc "go-mode" "" t nil)
+(autoload 'go-download-play "go-mode" "" t nil)
+(autoload 'gofmt-before-save "go-mode" "" t nil)
+(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'go-mode-hook (lambda ()
+			  (local-set-key (kbd "M-\.") 'godef-jump)))
+
+;; Auto-completion for Golang
+(require 'go-autocomplete)
+(require 'auto-complete-config)
