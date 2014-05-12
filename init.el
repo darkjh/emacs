@@ -161,7 +161,7 @@
 
 
 ;; Auto complete ------------------------------------------------------
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/vendors/auto-complete-1.3/dict")
+;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendors/auto-complete-1.3/dict")
 (require 'auto-complete-config)
 (ac-config-default)
 
@@ -170,7 +170,7 @@
 (define-key ac-menu-map "\C-n" 'ac-next)
 (define-key ac-menu-map "\C-p" 'ac-previous)
 
-;; Make Ac mode aware of latex
+;; Make Ac mode aware of latex1
 (require 'ac-math)
 (add-to-list 'ac-modes 'latex-mode 'org-mode)
 
@@ -419,6 +419,14 @@
 (add-hook 'before-save-hook 'gofmt-before-save)
 (add-hook 'go-mode-hook (lambda ()
 			  (local-set-key (kbd "M-\.") 'godef-jump)))
+
+;; display tab as 2 spaces in golang mode
+(add-hook 'go-mode-hook
+	  (lambda ()
+	    (setq-default)
+	    (setq tab-width 2)
+	    (setq standard-indent 2)
+	    (setq indent-tabs-mode nil)))
 
 ;; Auto-completion for Golang
 (require 'go-autocomplete)
