@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010, 2011, 2012  SAKURAI Masashi
 
 ;; Author: SAKURAI Masashi <m.sakurai at kiwanami.net>
-;; Version: 0.3.1
+;; Version: 0.3.2
 ;; Keywords: deferred, async
 ;; URL: https://github.com/kiwanami/emacs-deferred
 
@@ -65,11 +65,10 @@
 ;; This program makes simple multi-thread function, using
 ;; deferred.el.
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl)
 
 (defvar deferred:version nil "deferred.el version")
-(setq deferred:version "0.3")
+(setq deferred:version "0.3.2")
 
 ;;; Code:
 
@@ -98,6 +97,17 @@
        (setq self (lambda( ,@args ) ,@body))
        (funcall self ,@argsyms)))))
 
+(defmacro* deferred:try (d &key catch finally)
+  "Try-catch-finally macro. This macro simulates the
+try-catch-finally block asynchronously. CATCH and FINALLY can be
+nil. Because of asynchrony, this macro does not ensure that the
+task FINALLY should be called."
+  (let ((chain
+         (if catch `((deferred:error it ,catch)))))
+    (when finally
+      (setq chain (append chain `((deferred:watch it ,finally)))))
+    `(deferred:$ ,d ,@chain)))
+
 (defun deferred:setTimeout (f msec)
   "[internal] Timer function that emulates the `setTimeout' function in JS."
   (run-at-time (/ msec 1000.0) nil f))
@@ -115,8 +125,13 @@
 The lambda function can define with zero and one argument."
   (condition-case err
       (funcall f arg)
-    ('wrong-number-of-arguments 
-     (condition-case err2 
+    ('wrong-number-of-arguments
+     (display-warning 'deferred "\
+Callback that takes no argument may be specified.
+Passing callback with no argument is deprecated.
+Callback must take one argument.
+Or, this error is coming from somewhere inside of the callback: %S" err)
+     (condition-case err2
          (funcall f)
        ('wrong-number-of-arguments
         (signal 'wrong-number-of-arguments (cdr err))))))) ; return the first error
@@ -130,7 +145,7 @@ The lambda function can define with zero and one argument."
 (defmacro deferred:message (&rest args)
   "[internal] Debug log function."
   (when deferred:debug
-    `(progn 
+    `(progn
        (with-current-buffer (get-buffer-create "*deferred:debug*")
          (save-excursion
            (goto-char (point-max))
@@ -140,17 +155,17 @@ The lambda function can define with zero and one argument."
 (defun deferred:message-mark ()
   "[internal] Debug log function."
   (interactive)
-  (deferred:message "==================== mark ==== %s" 
+  (deferred:message "==================== mark ==== %s"
     (format-time-string "%H:%M:%S" (current-time))))
 
 (defun deferred:pp (d)
   (require 'pp)
   (deferred:$
     (deferred:nextc d
-      (lambda (x) 
+      (lambda (x)
         (pp-display-expression x "*deferred:pp*")))
     (deferred:error it
-      (lambda (e) 
+      (lambda (e)
         (pp-display-expression e "*deferred:pp*")))
     (deferred:nextc it
       (lambda (x) (pop-to-buffer "*deferred:pp*")))))
@@ -164,16 +179,13 @@ in the asynchronous tasks.")
 (defmacro deferred:condition-case (var protected-form &rest handlers)
   "[internal] Custom condition-case. See the comment for
 `deferred:debug-on-signal'."
-  (declare (debug (symbolp form &rest form)))
-  `(cond
-    ((null deferred:debug-on-signal)
-     (condition-case ,var ,protected-form ,@handlers))
-    (t
-     (let ((deferred:debug-on-signal-backup debug-on-signal))
-       (setq debug-on-signal deferred:debug-on-signal)
-       (unwind-protect
-           (condition-case ,var ,protected-form ,@handlers)
-         (setq debug-on-signal deferred:debug-on-signal-backup))))))
+  (declare (debug condition-case)
+           (indent 2))
+  `(let ((debug-on-signal
+          (or debug-on-signal deferred:debug-on-signal)))
+     (condition-case ,var
+         ,protected-form
+       ,@handlers)))
 
 
 
@@ -187,7 +199,7 @@ user can tune this paramter. However, applications should not
 modify it because the applications run on various environments.")
 
 (defvar deferred:queue nil
-  "[internal] The execution queue of deferred objects. 
+  "[internal] The execution queue of deferred objects.
 See the functions `deferred:post-task' and `deferred:worker'.")
 
 (defmacro deferred:pack (a b c)
@@ -203,7 +215,7 @@ See the functions `deferred:post-task' and `deferred:worker'.")
 D is a deferred object. WHICH is a symbol, `ok' or `ng'. ARG is
 an argument value for execution of the deferred task."
   (push (deferred:pack d which arg) deferred:queue)
-  (deferred:message "QUEUE-POST [%s]: %s" 
+  (deferred:message "QUEUE-POST [%s]: %s"
     (length deferred:queue) (deferred:pack d which arg))
   (deferred:schedule-worker)
   d)
@@ -214,13 +226,8 @@ an argument value for execution of the deferred task."
   (deferred:message "QUEUE-CLEAR [%s -> 0]" (length deferred:queue))
   (setq deferred:queue nil))
 
-(defun deferred:esc-msg (msg)
-  "[internal] Escaping the character '%'."
-  (replace-regexp-in-string
-   "\\([^%]\\|^\\)%\\([^%]\\)" "\\1%%\\2" msg))
-
 (defun deferred:worker ()
-  "[internal] Consume a deferred task. 
+  "[internal] Consume a deferred task.
 Mainly this function is called by timer asynchronously."
   (when deferred:queue
     (let* ((pack (car (last deferred:queue)))
@@ -230,7 +237,7 @@ Mainly this function is called by timer asynchronously."
       (setq deferred:queue (nbutlast deferred:queue))
       (condition-case err
           (setq value (deferred:exec-task d which arg))
-        (error 
+        (error
          (deferred:message "ERROR : %s" err)
          (message "deferred error : %s" err)))
       value)))
@@ -243,27 +250,35 @@ Mainly this function is called by timer asynchronously."
     value))
 
 (defun deferred:sync! (d)
-  "Wait for the given deferred task. For test and debugging."
-  (progn 
-    (lexical-let ((last-value 'deferred:undefined*))
-      (deferred:nextc d
-        (lambda (x) (setq last-value x)))
-      (while (eq 'deferred:undefined* last-value)
+  "Wait for the given deferred task. For test and debugging.
+Error is raised if it is not processed within deferred chain D."
+  (progn
+    (lexical-let ((last-value 'deferred:undefined*)
+                  uncaught-error)
+      (deferred:try
+        (deferred:nextc d
+          (lambda (x) (setq last-value x)))
+        :catch
+        (lambda (err) (setq uncaught-error err)))
+      (while (and (eq 'deferred:undefined* last-value)
+                  (not uncaught-error))
         (sit-for 0.05)
         (sleep-for 0.05))
+      (when uncaught-error
+        (deferred:resignal uncaught-error))
       last-value)))
 
 
 
 ;; Struct: deferred
-;; 
+;;
 ;; callback    : a callback function (default `deferred:default-callback')
 ;; errorback   : an errorback function (default `deferred:default-errorback')
 ;; cancel      : a canceling function (default `deferred:default-cancel')
 ;; next        : a next chained deferred object (default nil)
 ;; status      : if 'ok or 'ng, this deferred has a result (error) value. (default nil)
 ;; value       : saved value (default nil)
-;; 
+;;
 (defstruct deferred
   (callback 'deferred:default-callback)
   (errorback 'deferred:default-errorback)
@@ -274,13 +289,26 @@ Mainly this function is called by timer asynchronously."
   "[internal] Default callback function."
   (identity i))
 
-(defun deferred:default-errorback (error-msg)
+(defun deferred:default-errorback (err)
   "[internal] Default errorback function."
-  (error (deferred:esc-msg
-           (cond
-            ((stringp error-msg) error-msg)
-            ((listp error-msg) (cadr error-msg))
-            (t (format "%S" error-msg))))))
+  (deferred:resignal err))
+
+(defun deferred:resignal (err)
+  "[internal] Safely resignal ERR as an Emacs condition.
+
+If ERR is a cons (ERROR-SYMBOL . DATA) where ERROR-SYMBOL has an
+`error-conditions' property, it is re-signaled unchanged. If ERR
+is a string, it is signaled as a generic error using `error'.
+Otherwise, ERR is formatted into a string as if by `print' before
+raising with `error'."
+  (cond ((and (listp err)
+              (symbolp (car err))
+              (get (car err) 'error-conditions))
+         (signal (car err) (cdr err)))
+        ((stringp err)
+         (error "%s" err))
+        (t
+         (error "%S" err))))
 
 (defun deferred:default-cancel (d)
   "[internal] Default canceling function."
@@ -298,47 +326,45 @@ D is a deferred object. WHICH is a symbol, `ok' or `ng'. ARG is
 an argument value for execution of the deferred task."
   (deferred:message "EXEC : %s / %s / %s" d which arg)
   (when (null d) (error "deferred:exec-task was given a nil."))
-  (let ((callback (if (eq which 'ok) 
+  (let ((callback (if (eq which 'ok)
                       (deferred-callback d)
-                    (deferred-errorback d))))
+                    (deferred-errorback d)))
+        (next-deferred (deferred-next d)))
     (cond
      (callback
-      (let (value (next-deferred (deferred-next d)))
-        (deferred:condition-case err
-            (progn 
-              (setq value
-                    (deferred:call-lambda callback arg))
-              (cond
-               ((deferred-p value)
-                (deferred:message "WAIT NEST : %s" value)
-                (if next-deferred
-                    (deferred:set-next value next-deferred)
-                  value))
-               (t
-                (if next-deferred
-                    (deferred:post-task next-deferred 'ok value)
-                  (setf (deferred-status d) 'ok)
-                  (setf (deferred-value d) value)
-                  value))))
-          (error 
-           (cond
-            (next-deferred
-             (deferred:post-task next-deferred 'ng (error-message-string err)))
-            (deferred:onerror
-              (deferred:call-lambda deferred:onerror err))
-            (t
-             (deferred:message "ERROR : %s" err)
-             (message "deferred error : %s" err)
-             (setf (deferred-status d) 'ng)
-             (setf (deferred-value d) (error-message-string err))
-             (deferred:esc-msg (error-message-string err))))))))
+      (deferred:condition-case err
+          (let ((value (deferred:call-lambda callback arg)))
+            (cond
+             ((deferred-p value)
+              (deferred:message "WAIT NEST : %s" value)
+              (if next-deferred
+                  (deferred:set-next value next-deferred)
+                value))
+             (t
+              (if next-deferred
+                  (deferred:post-task next-deferred 'ok value)
+                (setf (deferred-status d) 'ok)
+                (setf (deferred-value d) value)
+                value))))
+        (error
+         (cond
+          (next-deferred
+           (deferred:post-task next-deferred 'ng err))
+          (deferred:onerror
+            (deferred:call-lambda deferred:onerror err))
+          (t
+           (deferred:message "ERROR : %S" err)
+           (message "deferred error : %S" err)
+           (setf (deferred-status d) 'ng)
+           (setf (deferred-value d) err)
+           err)))))
      (t ; <= (null callback)
-      (let ((next-deferred (deferred-next d)))
-        (cond
-         (next-deferred
-          (deferred:exec-task next-deferred which arg))
-         ((eq which 'ok) arg)
-         (t (error (deferred:esc-msg arg)))))))))
+      (cond
+       (next-deferred
+        (deferred:exec-task next-deferred which arg))
+       ((eq which 'ok) arg)
+       (t                             ; (eq which 'ng)
+        (deferred:resignal arg)))))))
 
 (defun deferred:set-next (prev next)
   "[internal] Connect deferred objects."
@@ -346,7 +372,7 @@ an argument value for execution of the deferred task."
   (cond
    ((eq 'ok (deferred-status prev))
     (setf (deferred-status prev) nil)
-    (let ((ret (deferred:exec-task 
+    (let ((ret (deferred:exec-task
                  next 'ok (deferred-value prev))))
       (if (deferred-p ret) ret
         next)))
@@ -401,7 +427,7 @@ an argument value for execution of the deferred task."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic utility functions
 
-(defvar deferred:onerror nil 
+(defvar deferred:onerror nil
   "Default error handler. This value is nil or a function that
   have one argument for the error message.")
 
@@ -414,7 +440,7 @@ an argument value for execution of the deferred task."
 (defun deferred:fail (&optional arg)
   "Create a synchronous deferred object."
   (let ((d (deferred:new)))
-    (deferred:exec-task d 'ok arg)
+    (deferred:exec-task d 'ng arg)
     d))
 
 (defun deferred:next (&optional callback arg)
@@ -443,25 +469,27 @@ The watch task CALLBACK can not affect deferred chains with
 return values. This function is used in following purposes,
 simulation of try-finally block in asynchronous tasks, progress
 monitoring of tasks."
-  (lexical-let* 
+  (lexical-let*
       ((callback callback)
        (normal (lambda (x) (ignore-errors (deferred:call-lambda callback x)) x))
-       (err    (lambda (e) (ignore-errors (deferred:call-lambda callback e)) (error e))))
+       (err    (lambda (e)
+                 (ignore-errors (deferred:call-lambda callback e))
+                 (deferred:resignal e))))
     (let ((nd (make-deferred :callback normal :errorback err)))
       (deferred:set-next d nd))))
 
 (defun deferred:wait (msec)
   "Return a deferred object scheduled at MSEC millisecond later."
-  (lexical-let 
+  (lexical-let
       ((d (deferred:new)) (start-time (float-time)) timer)
     (deferred:message "WAIT : %s" msec)
-    (setq timer (deferred:setTimeout 
-                  (lambda () 
-                    (deferred:exec-task d 'ok 
+    (setq timer (deferred:setTimeout
+                  (lambda ()
+                    (deferred:exec-task d 'ok
                       (* 1000.0 (- (float-time) start-time)))
                     nil) msec))
-    (setf (deferred-cancel d) 
-          (lambda (x) 
+    (setf (deferred-cancel d)
+          (lambda (x)
             (deferred:cancelTimeout timer)
             (deferred:default-cancel x)))
     d))
@@ -469,14 +497,14 @@ monitoring of tasks."
 (defun deferred:wait-idle (msec)
   "Return a deferred object which will run when Emacs has been
 idle for MSEC millisecond."
-  (lexical-let 
+  (lexical-let
       ((d (deferred:new)) (start-time (float-time)) timer)
     (deferred:message "WAIT-IDLE : %s" msec)
-    (setq timer 
-          (deferred:run-with-idle-timer 
-            (/ msec 1000.0) 
+    (setq timer
+          (deferred:run-with-idle-timer
+            (/ msec 1000.0)
             (lambda ()
-              (deferred:exec-task d 'ok 
+              (deferred:exec-task d 'ok
                 (* 1000.0 (- (float-time) start-time)))
               nil)))
     (setf (deferred-cancel d)
@@ -514,23 +542,23 @@ idle for MSEC millisecond."
   (deferred:message "LOOP : %s" times-or-list)
   (if (deferred:empty-p times-or-list) (deferred:next)
     (lexical-let*
-        (items (rd 
+        (items (rd
                 (cond
                  ((numberp times-or-list)
                   (loop for i from 0 below times-or-list
                         with ld = (deferred:next)
-                        do 
+                        do
                         (push ld items)
-                        (setq ld 
+                        (setq ld
                               (lexical-let ((i i) (func func))
                                 (deferred:nextc ld (lambda (x) (deferred:call-lambda func i)))))
                         finally return ld))
                  ((listp times-or-list)
                   (loop for i in times-or-list
                         with ld = (deferred:next)
-                        do 
+                        do
                         (push ld items)
-                        (setq ld 
+                        (setq ld
                               (lexical-let ((i i) (func func))
                                 (deferred:nextc ld (lambda (x) (deferred:call-lambda func i)))))
                         finally return ld)))))
@@ -565,17 +593,17 @@ idle for MSEC millisecond."
 
 (defun deferred:parallel-alist-to-array (alst)
   "[internal] Translation alist to array."
-  (loop for pair in 
+  (loop for pair in
         (sort alst (lambda (x y)
                      (< (car x) (car y))))
         collect (cdr pair)))
 
 (defun deferred:parallel-func-to-deferred (alst)
   "[internal] Normalization for parallel and earlier arguments."
-  (loop for pair in alst 
+  (loop for pair in alst
         for d = (cdr pair)
         collect
-        (progn 
+        (progn
           (unless (deferred-p d)
             (setf (cdr pair) (deferred:next d)))
           pair)))
@@ -586,16 +614,16 @@ idle for MSEC millisecond."
   (lexical-let ((nd (deferred:new))
                 (len (length alst))
                 values)
-    (loop for pair in 
+    (loop for pair in
           (deferred:parallel-func-to-deferred alst)
           with cd ; current child deferred
-          do 
+          do
           (lexical-let ((name (car pair)))
             (setq cd
                   (deferred:nextc (cdr pair)
                     (lambda (x)
                       (push (cons name x) values)
-                      (deferred:message "PARALLEL VALUE [%s/%s] %s" 
+                      (deferred:message "PARALLEL VALUE [%s/%s] %s"
                         (length values) len (cons name x))
                       (when (= len (length values))
                         (deferred:message "PARALLEL COLLECTED")
@@ -604,7 +632,7 @@ idle for MSEC millisecond."
             (deferred:error cd
               (lambda (e)
                 (push (cons name e) values)
-                (deferred:message "PARALLEL ERROR [%s/%s] %s" 
+                (deferred:message "PARALLEL ERROR [%s/%s] %s"
                   (length values) len (cons name e))
                 (when (= (length values) len)
                   (deferred:message "PARALLEL COLLECTED")
@@ -630,19 +658,19 @@ deferred task will be called with an array of the return
 values. ARGS can be a list or an alist of deferred objects or
 functions."
   (deferred:message "PARALLEL : %s" args)
-  (deferred:trans-multi-args args 
+  (deferred:trans-multi-args args
     'deferred:parallel 'deferred:parallel-list 'deferred:parallel-main))
 
 (defun deferred:earlier-main (alst)
   "[internal] Deferred alist implementation for `deferred:earlier'. "
   (deferred:message "EARLIER<KEY . VALUE>" )
-  (lexical-let ((nd (deferred:new)) 
+  (lexical-let ((nd (deferred:new))
                 (len (length alst))
                 value results)
-    (loop for pair in 
+    (loop for pair in
           (deferred:parallel-func-to-deferred alst)
           with cd ; current child deferred
-          do 
+          do
           (lexical-let ((name (car pair)))
             (setq cd
                   (deferred:nextc (cdr pair)
@@ -687,7 +715,7 @@ following deferred task will be called with the first return
 value. ARGS can be a list or an alist of deferred objects or
 functions."
   (deferred:message "EARLIER : %s" args)
-  (deferred:trans-multi-args args 
+  (deferred:trans-multi-args args
     'deferred:earlier 'deferred:earlier-list 'deferred:earlier-main))
 
 (defmacro deferred:timeout (timeout-msec timeout-form d)
@@ -698,17 +726,6 @@ deferred task and return the TIMEOUT-FORM."
      (deferred:nextc (deferred:wait ,timeout-msec)
        (lambda (x) ,timeout-form))
      ,d))
-
-(defmacro* deferred:try (d &key catch finally)
-  "Try-catch-finally macro. This macro simulates the
-try-catch-finally block asynchronously. CATCH and FINALLY can be
-nil. Because of asynchrony, this macro does not ensure that the
-task FINALLY should be called."
-  (let ((chain 
-         (if catch `((deferred:error it ,catch)))))
-    (when finally
-      (setq chain (append chain `((deferred:watch it ,finally)))))
-    `(deferred:$ ,d ,@chain)))
 
 
 
@@ -764,11 +781,11 @@ process."
       ((pd (deferred:process-buffer-gen f command args)) d)
     (setq d (deferred:nextc pd
               (lambda (buf)
-                (prog1 
+                (prog1
                     (with-current-buffer buf (buffer-string))
                   (kill-buffer buf)))))
     (setf (deferred-cancel d)
-          (lambda (x) 
+          (lambda (x)
             (deferred:default-cancel d)
             (deferred:default-cancel pd)))
     d))
@@ -780,12 +797,17 @@ process."
         ((f f) (command command) (args args)
          (proc-name (format "*deferred:*%s*:%s" command uid))
          (buf-name (format " *deferred:*%s*:%s" command uid))
+         (pwd default-directory)
+         (env process-environment)
+         (con-type process-connection-type)
          (nd (deferred:new)) proc-buf proc)
       (deferred:nextc d
         (lambda (x)
           (setq proc-buf (get-buffer-create buf-name))
           (condition-case err
-              (progn
+              (let ((default-directory pwd)
+                    (process-environment env)
+                    (process-connection-type con-type))
                 (setq proc
                       (if (null (car args))
                           (apply f proc-name buf-name command nil)
@@ -796,20 +818,20 @@ process."
                    (cond
                     ((string-match "exited abnormally" event)
                      (let ((msg (if (buffer-live-p proc-buf)
-                                    (deferred:buffer-string
-                                      (format "Process [%s] exited abnormally : %%s" 
-                                              command) proc-buf)
+                                    (format "Process [%s] exited abnormally : %s"
+                                            command
+                                            (with-current-buffer proc-buf (buffer-string)))
                                   (concat "Process exited abnormally: " proc-name))))
                        (kill-buffer proc-buf)
                        (deferred:post-task nd 'ng msg)))
                     ((equal event "finished\n")
                        (deferred:post-task nd 'ok proc-buf)))))
-                (setf (deferred-cancel nd) 
+                (setf (deferred-cancel nd)
                       (lambda (x) (deferred:default-cancel x)
                         (when proc
                           (kill-process proc)
                           (kill-buffer proc-buf)))))
-            (error (deferred:post-task nd 'ng (error-message-string err))))
+            (error (deferred:post-task nd 'ng err)))
           nil))
       nd)))
 
@@ -836,24 +858,31 @@ process."
 (eval-after-load "url"
   ;; for url package
   ;; TODO: proxy, charaset
-  '(progn
+  ;; List of gloabl variables to preserve and restore before url-retrieve call
+  '(lexical-let ((url-global-variables '(url-request-data
+                                         url-request-method
+                                         url-request-extra-headers)))
 
-     (defun deferred:url-retrieve (url &optional cbargs)
+     (defun deferred:url-retrieve (url &optional cbargs silent inhibit-cookies)
        "A wrapper function for url-retrieve. The next deferred
 object receives the buffer object that URL will load
-into. Currently dynamic binding variables are not supported."
-       (lexical-let ((nd (deferred:new)) (url url) (cbargs cbargs) buf)
+into. Values of dynamically bound 'url-request-data', 'url-request-method' and
+'url-request-extra-headers' are passed to url-retrieve call."
+       (lexical-let ((nd (deferred:new)) (url url)
+                     (cbargs cbargs) (silent silent) (inhibit-cookies inhibit-cookies) buf
+                     (local-values (mapcar (lambda (symbol) (symbol-value symbol)) url-global-variables)))
          (deferred:next
            (lambda (x)
-             (condition-case err
-                 (setq buf
-                       (url-retrieve 
-                        url (lambda (xx) (deferred:post-task nd 'ok buf))
-                        cbargs))
+             (progv url-global-variables local-values
+               (condition-case err
+                   (setq buf
+                         (url-retrieve
+                          url (lambda (xx) (deferred:post-task nd 'ok buf))
+                          cbargs silent inhibit-cookies))
                  (error (deferred:post-task nd 'ng err)))
-             nil))
+             nil)))
          (setf (deferred-cancel nd)
-               (lambda (x) 
+               (lambda (x)
                  (when (buffer-live-p buf)
                    (kill-buffer buf))))
          nd))
@@ -871,47 +900,34 @@ into. Currently dynamic binding variables are not supported."
          (kill-buffer buf))
        nil)
 
-     (defun deferred:url-get (url &optional params)
+     (defun deferred:url-get (url &optional params &rest args)
        "Perform a HTTP GET method with `url-retrieve'. PARAMS is
-a parameter list of (key . value) or key. The next deferred
+a parameter list of (key . value) or key. ARGS will be appended
+to deferred:url-retrieve args list. The next deferred
 object receives the buffer object that URL will load into."
        (when params
          (setq url
                (concat url "?" (deferred:url-param-serialize params))))
        (let ((d (deferred:$
-                  (deferred:url-retrieve url)
+                  (apply 'deferred:url-retrieve url args)
                   (deferred:nextc it 'deferred:url-delete-header))))
          (deferred:set-next
            d (deferred:new 'deferred:url-delete-buffer))
          d))
 
-     (defun deferred:url-post (url &optional params)
+     (defun deferred:url-post (url &optional params &rest args)
        "Perform a HTTP POST method with `url-retrieve'. PARAMS is
-a parameter list of (key . value) or key. The next deferred
+a parameter list of (key . value) or key. ARGS will be appended
+to deferred:url-retrieve args list. The next deferred
 object receives the buffer object that URL will load into."
-       (lexical-let ((nd (deferred:new)) 
-                     (url url) (params params)
-                     buf)
-         (deferred:next
-           (lambda (x)
-             (let ((url-request-method "POST")
-                   (url-request-extra-headers
-                    '(("Content-Type" . "application/x-www-form-urlencoded")))
-                   (url-request-data
-                    (deferred:url-param-serialize params)))
-               (condition-case err
-                   (setq buf 
-                         (url-retrieve 
-                          url 
-                          (lambda (&rest args) 
-                            (deferred:post-task nd 'ok buf))))
-                 (error (deferred:post-task nd 'ng err))))
-             nil))
-         (setf (deferred-cancel nd)
-               (lambda (x) 
-                 (when (buffer-live-p buf)
-                   (kill-buffer buf))))
-         (let ((d (deferred:nextc nd 'deferred:url-delete-header)))
+       (let ((url-request-method "POST")
+             (url-request-extra-headers
+              (append url-request-extra-headers
+                      '(("Content-Type" . "application/x-www-form-urlencoded"))))
+             (url-request-data (deferred:url-param-serialize params)))
+         (let ((d (deferred:$
+                    (apply 'deferred:url-retrieve url args)
+                    (deferred:nextc it 'deferred:url-delete-header))))
            (deferred:set-next
              d (deferred:new 'deferred:url-delete-buffer))
            d)))
@@ -920,7 +936,7 @@ object receives the buffer object that URL will load into."
        "[internal] Return a new string that is VAL URI-encoded."
        (unless (stringp val)
          (setq val (format "%s" val)))
-       (url-hexify-string 
+       (url-hexify-string
         (encode-coding-string val 'utf-8)))
 
      (defun deferred:url-param-serialize (params)
@@ -933,7 +949,7 @@ into a query string."
                 collect
                 (cond
                  ((consp p)
-                  (concat 
+                  (concat
                    (deferred:url-escape (car p)) "="
                    (deferred:url-escape (cdr p))))
                  (t

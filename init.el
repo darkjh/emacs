@@ -116,10 +116,13 @@
 
 
 ;; Configurations for Python ------------------------------------------
+(add-to-list 'load-path "~/.emacs.d/vendors/python-mode/")
+(setq py-install-directory "~/.emacs.d/vendors/python-mode/")
+(setq py-shell-name "ipython2")
+(require 'python-mode)
 
-(require 'ipython)
-(setq py-python-command-args '("-pylab" "-colors" "nocolor"))
-
+;; (require 'ipython)
+;; (setq py-python-command-args '("-pylab" "-colors" "nocolor"))
 
 (require 'lambda-mode)
 (add-hook 'python-mode-hook #'lambda-mode 1)
@@ -140,14 +143,14 @@
 ;; (add-hook 'lisp-mode-hook
 ;;           #'(lambda () (setq autopair-dont-activate t)))
 ;;Autopair for python
-(add-hook 'python-mode-hook
-          #'(lambda ()
-               (push '(?' . ?')
+;; (add-hook 'python-mode-hook
+;;           #'(lambda ()
+;;                (push '(?' . ?')
 
-                     (getf autopair-extra-pairs :code))
-               (setq autopair-handle-action-fns
-                     (list #'autopair-default-handle-action
-                           #'autopair-python-triple-quote-action))))
+;;                      (getf autopair-extra-pairs :code))
+;;                (setq autopair-handle-action-fns
+;;                      (list #'autopair-default-handle-action
+;;                            #'autopair-python-triple-quote-action))))
 
 ;;delete trailing spaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -406,8 +409,8 @@
 (autoload 'dirtree "dirtree" "Add directory to tree view" t)
 
 ;; Scala mode  --------------------------------------------------------
-(add-to-list 'load-path "~/.emacs.d/vendors/scala-mode2")
-(require 'scala-mode2)
+;; (add-to-list 'load-path "~/.emacs.d/vendors/scala-mode2")
+;; (require 'scala-mode2)
 
 ;; Golang
 (require 'go-mode)
