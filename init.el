@@ -434,3 +434,8 @@
 ;; Auto-completion for Golang
 (require 'go-autocomplete)
 (require 'auto-complete-config)
+
+
+;; Rust-lang
+(autoload 'rust-mode "rust-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
