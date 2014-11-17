@@ -297,19 +297,19 @@
 
 ;; Org-Mode ------------------------------------------------------------
 
-(require 'org-install)
-(require 'org-publish)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-(add-hook 'org-mode-hook 'turn-on-font-lock)
-(add-hook 'org-mode-hook
-	  (lambda () (setq truncate-lines nil)))
-(global-set-key "\C-cb" 'org-iswitchb)
-(setq org-directory "~/Dropbox/org-notes")
-(setq org-mobile-directory "~/Dropbox/org-notes")
-(setq org-mobile-inbox-for-pull "~/Dropbox/org-notes")
+;; (require 'org-install)
+;; (require 'org-publish)
+;; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+;; (define-key global-map "\C-cl" 'org-store-link)
+;; (define-key global-map "\C-ca" 'org-agenda)
+;; (setq org-log-done t)
+;; (add-hook 'org-mode-hook 'turn-on-font-lock)
+;; (add-hook 'org-mode-hook
+;; 	  (lambda () (setq truncate-lines nil)))
+;; (global-set-key "\C-cb" 'org-iswitchb)
+;; (setq org-directory "~/Dropbox/org-notes")
+;; (setq org-mobile-directory "~/Dropbox/org-notes")
+;; (setq org-mobile-inbox-for-pull "~/Dropbox/org-notes")
 
 ;; Word Count Mode -----------------------------------------------------
 
