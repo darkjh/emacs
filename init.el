@@ -55,7 +55,7 @@
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
  '(tool-bar-mode nil nil (tool-bar)))
 (require 'quack)
-;; (set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
+(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 
 (require 'scheme-complete)
 (autoload 'scheme-smart-complete "scheme-complete" nil t)
