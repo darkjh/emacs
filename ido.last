@@ -1,0 +1,75 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/darkjh/projects/c/jos-2014/" . "boot/")
+ ("/home/darkjh/projects/c/" . "jos-2014/")
+ ("/home/darkjh/projects/go/src/6.824/" . "kvpaxos/")
+ ("/home/darkjh/projects/go/src/" . "6.824/")
+ ("/home/darkjh/projects/go/" . "src/")
+ ("/home/" . "darkjh/")
+ ("/home/darkjh/" . "projects/")
+ ("/home/darkjh/projects/scala/SparkInternals/markdown/" . "english/")
+ ("/home/darkjh/projects/scala/SparkInternals/" . "markdown/")
+ ("/home/darkjh/projects/scala/" . "SparkInternals/")
+ ("/home/darkjh/projects/" . "c/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/darkjh/"
+ "/home/darkjh/projects/c/jos-2014/boot/"
+ "/home/darkjh/projects/go/src/6.824/kvpaxos/"
+ "/home/darkjh/projects/scala/SparkInternals/markdown/"
+ "/home/darkjh/projects/scala/SparkInternals/markdown/english/"
+ "/home/darkjh/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "crane"
+ "boot.S"
+ "main.c"
+ "common.go"
+ "server.go"
+ "client.go"
+ "7-Broadcast.md"
+ "4-shuffleDetails.md"
+ "init.el"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/darkjh/" (21921 36613 591520 709000) "idea-IC-141.713.2/" ".i3/" ".bash_profile" ".m2/" ".gitignore" ".emacs.d/" ".bash_history" ".pki/" ".functions" ".ivy2/" ".bash_logout" ".wicd/" ".config/" ".Xauthority" ".java/" ".IdeaIC14/" "crane" "./" ".conkyrc" ".ghc/" ".local/" ".aliases" ".cache/" ".gnome/" ".sbt/" ".nv/" "spark-1.4.0/" ".mplayer/" ".dbus/" ".exports" ".gdbinit" ".gitconfig" "jdk1.7.0_80/" ".Xresources" "projects/" "../" "Downloads/" "scala-2.11.7/" ".bashrc" "dotfiles/" ".xinitrc")
+
+ ("/home/darkjh/projects/c/jos-2014/boot/" (21882 46247 857494 966000) "sign.pl" "./" "Makefrag" "boot.S" "../" "main.c")
+
+ ("/home/darkjh/projects/c/jos-2014/" (21882 54675 977244 659000) "lib/" ".git/" "GNUmakefile" ".gitignore" "mergedep.pl" "user/" "handin-prep" "fs/" "kern/" "./" "obj/" "inc/" ".gdbinit.tmpl" ".dir-locals.el" "CODING" ".gdbinit" "grade-lab1" "boot/" "gradelib.py" "conf/" "../")
+
+ ("/home/darkjh/projects/c/" (21889 31726 536945 456000) "xv6/" "./" "jos-2014/" "libs/" "../")
+
+ ("/home/darkjh/projects/" (21882 46359 684553 738000) "go/" "./" "c/" "scala/" "../")
+
+ ("/home/darkjh/projects/go/src/6.824/kvpaxos/" (21850 31324 351270 674000) "client.go" "common.go" "./" "server.go" "test_test.go" "log" "../")
+
+ ("/home/darkjh/projects/go/src/6.824/" (21851 49898 988012 721000) ".git/" "debug/" "mapreduce/" ".gitignore" "rpc/" "./" "lockservice/" "kvpaxos/" "viewservice/" "shardkv/" "main/" "shardmaster/" "Makefile" "paxos/" "../" "pbservice/")
+
+ ("/home/darkjh/projects/go/src/" (21850 30908 931274 443000) "./" "6.824/" "../")
+
+ ("/home/darkjh/projects/go/" (21851 48295 481360 603000) "src/" "./" "6.824-golabs-2014/" "../")
+
+ ("/home/darkjh/projects/scala/SparkInternals/markdown/english/" (21843 62098 891956 865000) "7-Broadcast.md" "./" "2-JobLogicalPlan.md" "3-JobPhysicalPlan.md" "5-Architecture.md" "1-Overview.md" "7-Broadcast.md~" "0-Introduction.md" "../")
+
+ ("/home/darkjh/projects/scala/SparkInternals/markdown/" (21843 59725 68520 848000) "PNGfigures/" ".DS_Store" "7-Broadcast.md" "./" "2-JobLogicalPlan.md" "4-shuffleDetails.md" "6-CacheAndCheckpoint.md" "3-JobPhysicalPlan.md" "figures/" "readme.md" "5-Architecture.md" "english/" "1-Overview.md" "0-Introduction.md" "../")
+
+ ("/home/darkjh/.emacs.d/" (21838 14571 54882 767000) ".git/" "snippets/" ".gitignore" ".emacs.desktop" "./" "init.el" "ido.last~" "auto-save-list/" ".python-environments/" "ac-comphist.dat" "vendors/" "tramp" "ido.last" "../")
+
+ ("/home/" (21833 15391 298736 31000) "lost+found/" "darkjh/" "./" "../")
+
+ ("/home/darkjh/projects/scala/SparkInternals/" (21834 42406 964883 983000) ".git/" ".DS_Store" "pdf/" "./" "markdown/" "Graphs/" "../")
+
+ ("/home/darkjh/projects/scala/" (21834 42322 938213 681000) "SparkInternals/" "./" "../")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

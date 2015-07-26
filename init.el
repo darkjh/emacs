@@ -4,12 +4,12 @@
 ;; ju.han.felix@gmail.com
 
 ;; Load path ----------------------------------------------------------
-(add-to-list 'load-path "~/.emacs.d")
-(progn (cd "~/.emacs.d")
-        (normal-top-level-add-subdirs-to-load-path))
+;; (add-to-list 'load-path "~/.emacs.d")
+;; (progn (cd "~/.emacs.d")
+;;         (normal-top-level-add-subdirs-to-load-path))
 (add-to-list 'load-path "~/.emacs.d/vendors")
-(progn (cd "~/.emacs.d/vendors")
-        (normal-top-level-add-subdirs-to-load-path))
+;; (progn (cd "~/.emacs.d/vendors")
+;;         (normal-top-level-add-subdirs-to-load-path))
 
 ;; User settings ------------------------------------------------------
 (setq user-full-name "JU Han")
@@ -88,6 +88,7 @@
 
 ;; Configurations for LaTex -------------------------------------------
 
+(add-to-list 'load-path "~/.emacs.d/vendors/auctex-11.86")
 (load "auctex.el" nil t t)
 
 (setq TeX-auto-save t)
@@ -127,15 +128,6 @@
 (require 'lambda-mode)
 (add-hook 'python-mode-hook #'lambda-mode 1)
 (setq lambda-symbol (string (make-char 'greek-iso8859-7 107)))
-
-;; Jedi for python
-;; EPC
-(add-to-list 'load-path "~/.emacs.d/vendors/emacs-jedi")
-(require 'epc)
-(add-hook 'python-mode-hook 'jedi:setup)
-(autoload 'jedi:setup "jedi" nil t)
-(setq jedi:setup-keys t)
-
 ;; Autopair -----------------------------------------------------------
 
 (autoload 'autopair-global-mode "autopair" nil t)
@@ -158,12 +150,13 @@
 
 ;; Yasnippet ----------------------------------------------------------
 
-(require 'yasnippet-bundle)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets/")
+;; (require 'yasnippet-bundle)
+;; (yas/initialize)
+;; (yas/load-directory "~/.emacs.d/snippets/")
 
 
 ;; Auto complete ------------------------------------------------------
+(add-to-list 'load-path "~/.emacs.d/vendors/auto-complete-1.3")
 ;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendors/auto-complete-1.3/dict")
 (require 'auto-complete-config)
 (ac-config-default)
@@ -236,42 +229,39 @@
   (add-hook hook 'hideshowvis-enable))
 
 
-
 ;; Eshell ---------------------------------------------------------------
 
-;; Execute time for each command
-(add-hook 'eshell-load-hook
-          (lambda()(setq last-command-start-time (time-to-seconds))))
-(add-hook 'eshell-pre-command-hook
-          (lambda()(setq last-command-start-time (time-to-seconds))))
-(add-hook 'eshell-before-prompt-hook
-          (lambda()
-              (message "spend %g seconds"
-                       (- (time-to-seconds) last-command-start-time))))
+;; ;; Execute time for each command
+;; (add-hook 'eshell-load-hook
+;;           (lambda()(setq last-command-start-time (time-to-seconds))))
+;; (add-hook 'eshell-pre-command-hook
+;;           (lambda()(setq last-command-start-time (time-to-seconds))))
+;; (add-hook 'eshell-before-prompt-hook
+;;           (lambda()
+;;               (message "spend %g seconds"
+;;                        (- (time-to-seconds) last-command-start-time))))
 
-(defvar ac-source-eshell-pcomplete
-  '((candidates . (pcomplete-completions))))
-(defun ac-complete-eshell-pcomplete ()
-  (interactive)
-  (auto-complete '(ac-source-eshell-pcomplete)))
-;; 自动开启 ac-mode
-;; 需要 (global-auto-complete-mode 1)
-(add-to-list 'ac-modes 'eshell-mode)
-(setq ac-sources '(ac-source-eshell-pcomplete
-                   ;; ac-source-files-in-current-dir
-                   ;; ac-source-filename
-                   ;; ac-source-abbrev
-                   ;; ac-source-words-in-buffer
-                   ;; ac-source-imenu
-))
+;; (defvar ac-source-eshell-pcomplete
+;;   '((candidates . (pcomplete-completions))))
+;; (defun ac-complete-eshell-pcomplete ()
+;;   (interactive)
+;;   (auto-complete '(ac-source-eshell-pcomplete)))
+;; ;; 自动开启 ac-mode
+;; ;; 需要 (global-auto-complete-mode 1)
+;; (add-to-list 'ac-modes 'eshell-mode)
+;; (setq ac-sources '(ac-source-eshell-pcomplete
+;;                    ;; ac-source-files-in-current-dir
+;;                    ;; ac-source-filename
+;;                    ;; ac-source-abbrev
+;;                    ;; ac-source-words-in-buffer
+;;                    ;; ac-source-imenu
+;; ))
 
 ;; ESS for R ----------------------------------------------------------
 
 ;; (add-to-list 'load-path "/home/darkjh/emacs-packages/ess-12.09-2/lisp/")
 ;; (require 'ess-site)
 
-;; Minimap ------------------------------------------------------------
-(require 'minimap)
 
 ;; ;; Ibus input mode ----------------------------------------------------
 
@@ -320,19 +310,19 @@
 
 ;; Octave Mode ---------------------------------------------------------
 
-(autoload 'octave-mode "octave-mod" nil t)
-(setq auto-mode-alist
-(cons '("\\.m$" . octave-mode) auto-mode-alist))
+;; (autoload 'octave-mode "octave-mod" nil t)
+;; (setq auto-mode-alist
+;; (cons '("\\.m$" . octave-mode) auto-mode-alist))
 
-(add-hook 'octave-mode-hook
-(lambda ()
-(abbrev-mode 1)
-(auto-fill-mode 1)
-(if (eq window-system 'x)
-(font-lock-mode 1))))
+;; (add-hook 'octave-mode-hook
+;; (lambda ()
+;; (abbrev-mode 1)
+;; (auto-fill-mode 1)
+;; (if (eq window-system 'x)
+;; (font-lock-mode 1))))
 
-;; run an inferior Octave process in a special Emacs buffer
-(autoload 'run-octave "octave-inf" nil t)
+;; ;; run an inferior Octave process in a special Emacs buffer
+;; (autoload 'run-octave "octave-inf" nil t)
 
 ;; Ruby -----------------------------------------------------------------
 
@@ -341,11 +331,11 @@
 ;; (eval-after-load 'ruby-mode
 ;;   '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
 
-(require 'inf-ruby)
-(autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
-(autoload 'inf-ruby-setup-keybindings "inf-ruby" "" t)
-(eval-after-load 'ruby-mode
-  '(add-hook 'ruby-mode-hook 'inf-ruby-setup-keybindings))
+;; (require 'inf-ruby)
+;; (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
+;; (autoload 'inf-ruby-setup-keybindings "inf-ruby" "" t)
+;; (eval-after-load 'ruby-mode
+;;   '(add-hook 'ruby-mode-hook 'inf-ruby-setup-keybindings))
 
 ;; Markdown -------------------------------------------------------------
 
